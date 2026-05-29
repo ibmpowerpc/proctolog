@@ -20,6 +20,8 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.api_key_env, "ROUTERAI_API_KEY")
         self.assertEqual(config.model, "x-ai/grok-4.3")
         self.assertEqual(config.output_dir, "~/.local/share/proctolog")
+        self.assertIn("рамки объёма", config.prompt)
+        self.assertIn("лимит слов", config.system_prompt)
 
     def test_rejects_text_only_deepseek_for_screenshot_workflow(self) -> None:
         config = Config(model="deepseek/deepseek-v4-pro")
