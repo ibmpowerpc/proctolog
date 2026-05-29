@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proc-util"
+version = "0.1.0"
+description = "CLI monitor that periodically sends screenshots to RouterAI Chat Completions."
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Roman Kormilcyn" }
+]
+
+[project.scripts]
+proc-util = "proc_util.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

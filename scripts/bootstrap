@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+venv_dir="$project_dir/.venv"
+
+python3 -m venv "$venv_dir"
+
+cat > "$venv_dir/bin/proc-util" <<EOF
+#!/bin/sh
+PYTHONPATH="$project_dir/src\${PYTHONPATH:+:\$PYTHONPATH}" exec "$venv_dir/bin/python" -m proc_util "\$@"
+EOF
+
+chmod +x "$venv_dir/bin/proc-util"
+
+echo "Created $venv_dir"
+echo "Run:"
+echo "  cd $project_dir"
+echo "  source .venv/bin/activate"
+echo "  proc-util --help"
