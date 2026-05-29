@@ -6,7 +6,8 @@
 ## Установка
 
 ```sh
-cd ~/Projects/proc-util
+git clone https://github.com/ibmpowerpc/proctolog
+cd proctolog
 scripts/bootstrap
 source .venv/bin/activate
 ```
@@ -72,7 +73,7 @@ proctolog run --once
 На хосте 1 выполните:
 
 ```sh
-cd ~/Projects/proc-util
+cd /path/to/proctolog
 source .venv/bin/activate
 proctolog start
 ```
