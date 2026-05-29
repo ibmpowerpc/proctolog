@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import replace
 import json
+import multiprocessing
 import sys
 
 from .config import Config, default_config_path, load_config, write_default_config
@@ -41,6 +42,24 @@ def main(argv: list[str] | None = None) -> int:
                 config = replace(config, output_dir=args.output_dir)
                 config.validate()
             serve(config, args.host, args.port)
+            return 0
+
+        if args.command == "start":
+            config = _apply_start_overrides(load_config(args.config), args)
+            options = RunOptions(dry_run=args.dry_run)
+            process = multiprocessing.get_context("spawn").Process(
+                target=run_monitor,
+                args=(config, options),
+            )
+            process.start()
+            try:
+                serve(config, args.host, args.port)
+            finally:
+                process.terminate()
+                process.join(timeout=2)
+                if process.is_alive():
+                    process.kill()
+                    process.join(timeout=2)
             return 0
 
         parser.print_help()
@@ -92,6 +111,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="host to bind; 0.0.0.0 makes it visible on the local network",
     )
     serve_parser.add_argument("--port", type=int, default=8765, help="port to bind")
+
+    start = subparsers.add_parser("start", help="run monitor and HTTP server together")
+    start.add_argument("--config", help=f"default: {default_config_path()}")
+    start.add_argument("--dry-run", action="store_true", help="capture and log without API calls")
+    start.add_argument("--interval", type=float, help="override interval_seconds")
+    start.add_argument("--prompt", help="override the configured prompt")
+    start.add_argument("--model", help="override the configured model")
+    start.add_argument("--detail", choices=["auto", "low", "high"], help="image detail")
+    start.add_argument("--output-dir", help="override output_dir")
+    start.add_argument(
+        "--screenshot-command",
+        nargs="+",
+        help="override screenshot_command; use {output} as the target path",
+    )
+    start.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="host to bind; 0.0.0.0 makes it visible on the local network",
+    )
+    start.add_argument("--port", type=int, default=8765, help="port to bind")
     return parser
 
 
@@ -113,6 +152,10 @@ def _apply_run_overrides(config: Config, args: argparse.Namespace) -> Config:
     updated = replace(config, **changes)
     updated.validate()
     return updated
+
+
+def _apply_start_overrides(config: Config, args: argparse.Namespace) -> Config:
+    return _apply_run_overrides(config, args)
 
 
 if __name__ == "__main__":
