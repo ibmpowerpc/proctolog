@@ -3,6 +3,11 @@
 Утилита делает скриншоты, отправляет их в RouterAI и показывает последний ответ
 на web-странице.
 
+## Как это выглядит
+
+<img width="1280" height="591" alt="telegram-cloud-photo-size-2-5244732930955877065-y" src="https://github.com/user-attachments/assets/0cfad1ea-3bc5-46c1-a9f7-743cbd498a5e" />
+
+
 ## Установка
 
 ```sh
