@@ -55,7 +55,7 @@ def main(argv: list[str] | None = None) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="proc-util",
+        prog="proctolog",
         description="Periodically send screenshots to RouterAI Chat Completions.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)

@@ -90,7 +90,7 @@ def run_monitor(config: Config, options: RunOptions) -> None:
         except Exception as error:
             if options.once:
                 raise
-            print(f"proc-util iteration failed: {error}", file=sys.stderr)
+            print(f"proctolog iteration failed: {error}", file=sys.stderr)
 
         if options.once:
             return
@@ -118,7 +118,7 @@ def run_iteration_cancelable(
     while process.is_alive():
         if is_paused(output_dir):
             _terminate_process(process)
-            print("proc-util iteration cancelled by pause", file=sys.stderr)
+            print("proctolog iteration cancelled by pause", file=sys.stderr)
             return None
         process.join(timeout=CONTROL_POLL_SECONDS)
 

@@ -14,11 +14,14 @@ from .control import is_paused, toggle_paused
 
 def serve(config: Config, host: str, port: int) -> None:
     output_dir = expand_path(config.output_dir)
+    old_output_dir = expand_path("~/.local/share/proc-util")
+    if not output_dir.exists() and old_output_dir.exists():
+        output_dir = old_output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
     handler = _handler_for(output_dir)
     server = ThreadingHTTPServer((host, port), handler)
-    print(f"Serving proc-util transcript from {output_dir}")
+    print(f"Serving proctolog transcript from {output_dir}")
     print(f"Local URL: http://127.0.0.1:{server.server_port}")
     for address in _local_addresses():
         print(f"LAN URL:   http://{address}:{server.server_port}")
@@ -88,7 +91,7 @@ def _render_index(output_dir: Path) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="10">
-  <title>proc-util answers</title>
+  <title>proctolog</title>
   <style>
     :root {{
       color-scheme: light dark;

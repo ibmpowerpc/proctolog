@@ -6,7 +6,8 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_CONFIG_PATH = Path("~/.config/proc-util/config.json")
+DEFAULT_CONFIG_PATH = Path("~/.config/proctolog/config.json")
+OLD_DEFAULT_CONFIG_PATH = Path("~/.config/proc-util/config.json")
 
 
 @dataclass
@@ -29,7 +30,7 @@ class Config:
     detail: str = "low"
     conversation_id: str | None = None
     history_turns: int = 3
-    output_dir: str = "~/.local/share/proc-util"
+    output_dir: str = "~/.local/share/proctolog"
     keep_screenshots: int | None = 120
     screenshot_command: list[str] | None = None
     request_timeout_seconds: float = 120.0
@@ -62,6 +63,10 @@ def default_config_path() -> Path:
 
 def load_config(path: str | Path | None = None) -> Config:
     config_path = expand_path(path) if path else default_config_path()
+    if path is None and not config_path.exists():
+        old_config_path = expand_path(OLD_DEFAULT_CONFIG_PATH)
+        if old_config_path.exists():
+            config_path = old_config_path
     if not config_path.exists():
         config = Config()
         config.validate()

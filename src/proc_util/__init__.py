@@ -1,4 +1,4 @@
-"""proc-util package."""
+"""proctolog package."""
 
 __all__ = ["__version__"]
 
