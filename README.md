@@ -23,6 +23,28 @@ export ROUTERAI_API_KEY="..."
 System Settings -> Privacy & Security -> Screen Recording
 ```
 
+На Linux установите одну из утилит для скриншотов:
+
+```sh
+# Wayland, wlroots/Sway/Hyprland
+sudo apt install grim
+
+# GNOME/KDE/X11
+sudo apt install gnome-screenshot
+
+# X11 fallback
+sudo apt install scrot
+```
+
+Если команда скриншота нестандартная, задайте её в конфиге через
+`screenshot_command`, например:
+
+```json
+{
+  "screenshot_command": ["grim", "{output}"]
+}
+```
+
 ## Первый запуск
 
 Создайте конфиг:
